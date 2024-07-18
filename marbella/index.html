@@ -2,12 +2,97 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <script id="snapchat-share-button" src="https://sdk.snapkit.com/js/v1/create.js"></script>
+    <script src="chrome-extension://ffbemmhlkcccdcbncdgljhhaelfpjmbk/js/ajax-listener-other.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Linked Tree --> 
+</head>
+
+    <!-- Linked Tree --> 
     <title>Lista de canciones y complacencias</title>
     <style>
-            .error-message {
-              display: none;
+
+            .donation .hiden {
+            display: none;
             }
+            .contained{
+                max-width: 75%;
+            }
+            input.label{
+                border: none;
+                outline: none;
+            }
+
+            .btn-btc {
+                display: flex;
+                align-items: center; 
+                padding: 8px 12px;
+            }
+            .btn{
+                color:white!important; 
+            }
+            
+            .btc{
+               background-color:  #FF9900!important;
+               color: white!important; 
+            }
+            
+            .zelle {
+                background-color:  #6c1ed4!important;
+            }
+            .venmo {
+                background-color: #008cff!important;
+            }
+            .eth{
+                background-color:#627eea!important;
+            }
+            .xrp {
+                background-color:#1e242b!important;
+                color:white!important;
+            }
+            .cashapp{
+                background-color: #00d82d!important;
+            }
+            .btn-icon {
+                background-repeat: no-repeat;
+                background-position: center; 
+                background-size: contain;
+                padding: 1.5rem;
+                width: calc(100% - 20px);
+                height: 100%;
+            }
+
+            .xrp-icon{
+                background-image: url('../marbella/payments/xrp2.png');
+            }
+            .btc-icon{
+                background-image: url('../marbella/payments/bitcoin.png');
+            }
+            .cashApp-icon {
+                background-image: url('../marbella/payments/cashApp.png');
+            }
+
+            .eth-icon {
+                background-image: url('../marbella/payments/eth.png');
+            }
+
+            .venmo-icon {
+                background-image: url('../marbella/payments/venmo.png');
+            }
+
+            .zelle-icon {
+                background-image: url('../marbella/payments/zelle.png');
+            }
+
+            .error-message {
+                display: none;
+            }
+
+            .row {
+            --bs-gutter-x: 0.5rem;
+            }
+
             .error-message .close {
                 position: absolute;
                 top: 10px;
@@ -22,9 +107,53 @@
             .error-message .close:hover {
             background-color: #ddd;
             }
+
+            .linktree-button {
+                cursor: pointer;
+                padding: 10px 20px; 
+                border: 1px solid #ddd; 
+                border-radius: 5px; 
+                text-decoration: none; 
+                text-align: center;
+                color: #000; 
+                background-color: #eee; 
+                transition: all 0.2s ease-in-out; 
+
+                hyphens: auto;
+                white-space: normal;
+                background: none;
+                color: inherit;
+                transition: box-shadow 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, border-color 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, transform 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, background-color 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s;
+                overflow-wrap: break-word;
+                word-break: break-word;
+                padding-left: 44px;
+                padding-right: 44px;
+                min-height: 64px !important;
+                }
+
+            .linktree-button:hover {
+            background-color: #ddd;
+            }
           </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function handleAdminQueryParam() {
+            const adminParam = getQueryParam('admin');
+            const getAllButton = document.getElementById('getAllButton');
+            if (adminParam === 'true') {
+                getAllButton.style.display = 'block'; // Show the button
+            } else {
+                getAllButton.style.display = 'none'; // Hide the button
+            }
+        }
+
+        window.onload = handleAdminQueryParam;
+
         class Cancion {
             constructor(artista, cancion, karaoke, canta) {
                 this.artista = artista;
@@ -97,6 +226,13 @@
             });
         });
 
+        // show donation Qr
+        $(".donation .btn").click(function(){
+            var buttonId = $(this).attr('id'); 
+            $(".donation .hiden").slideUp(); 
+            $("#" + buttonId + "-row").slideDown(); 
+        });
+
         // quien canta 
         $("#whoSings").change(function() {
             if ($(this).val() === "yo") {
@@ -165,7 +301,8 @@
 
         <form id="formulario-complacencias" class="row"> <div class="col-md-6"> <label for="whoSings" class="form-label">¿Quieres cantar?</label>
                 <select class="form-select" id="whoSings" name="singer">
-                    <option value="you">No, quiero que cante la artista</option>
+                    <option value="youn">No, quiero que cante la artista</option>
+                    <option value="you">No, Solo quiero escuchar la cancion original</option>
                     <option value="yo">Sí, quiero cantar</option>
                 </select>
             </div>
@@ -188,9 +325,120 @@
         <button  id="getAllButton" class="btn btn-sm btn-danger deleteButton">Actualizar</button>
     </div>
 
+<!-- NUEVOS BOTONES --> 
+
+<div class="container">
+        <div class="row">
+                <div class="col-12 col-md-6">
+                        <a href="https://www.facebook.com/profile.php?id=61559851526178&mibextid=ZbWKwL" target="_blank" rel="noopener">
+                            <div class="linktree-button">
+                                <i class="fas fa-link"></i> <span>FaceBook</span>
+                            </div>
+                        </a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <a href="https://open.spotify.com/artist/5Y0XuvPYYNBbYOZKmPRD0V?si=nY_La0GNSdCRHP8b3KV4sA" target="_blank" rel="noopener">
+                        <div class="linktree-button">
+                            <i class="fas fa-link"></i> <span>Spotify</span>
+                        </div>
+                     </a>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <a href="https://www.instagram.com/marbela.moss/" target="_blank" rel="noopener">
+                    <div class="linktree-button">
+                        <i class="fas fa-link"></i> <span>Instagram</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6">
+                <a href="https://www.youtube.com/@marbela5273" target="_blank" rel="noopener">
+                    <div class="linktree-button">
+                        <i class="fas fa-link"></i> <span>Youtube</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <a href="https://www.tiktok.com/@marbella.moss?lang=es" target="_blank" rel="noopener">
+                    <div class="linktree-button">
+                        <i class="fas fa-link"></i> <span>TikTok</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- TERMINAN NUEVOS BOTONES --> 
    
+    <div class="container donation">
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-12 col-md-12"> 
+                <h2>Donaciones</h2>
+                <div> <p> Te agrada el show considera hacer una donacion, puedes usar uno de los siguientes medios para hacer tu pago</p> </div>
+            </div>
+        </div>
+        <div id="button-row"class="row"> 
+            <div class="col-12 col-md-12"> 
+                    <button type="button" id="venmo" class="btn venmo"><span class="btn-icon venmo-icon"></span> Venmo</button>
+                    <button type="button" id="zelle" class="btn zelle"><span class="btn-icon zelle-icon"></span> Zelle</button>
+                    <button type="button" id="cshap" class="btn cashapp"><span class="btn-icon cashApp-icon"></span> CashApp</button>
+                    <button type="button" id="btc" class="btn btn-btc btc"><span class="btn-icon btc-icon"></span></span> Bitcoin</button>
+                    <button type="button" id="eth" class="btn eth"><span class="btn-icon eth-icon"></span> Etherium</button>
+                    <button type="button" id="xrp" class="btn xrp"><span class="btn-icon xrp-icon"></span> XRP</button>
+            </div>
+        </div>
+        <div id="xrp-row"class="row hiden">
+            <div class="col-12 col-md-12 text-center">
+                    <img class="contained" src="../marbella/codes/xrp.jpeg">
+                    <br />
+                    <br />
+                    <label for="">Address:</label>   <input class="label" type="text"  value="bitcoinAddressHash123" readonly>
+                    <br>
+                    <label for="">Tag:</label> <input type="text"  class="label" value="bitcoinAddressHash123" readonly>
+            </div>
+        </div>
+        <div id="btc-row" class="row hiden">
+                <div class="col-12 col-md-12 text-center">
+                        <img class="contained" src="../marbella/codes/bitcoin.jpeg">
+                        <br />
+                        <br />
+                        <label for="">Address:</label> <input class="label" type="text" value="bitcoinAddressHash123" readonly>
+                </div>
+        </div>
+        <div id="cshap-row"class="row hiden">
+                <div class="col-12 col-md-12 text-center">
+                        <img class="contained" src="../marbella/codes/cashApp.jpeg">
+                        <br />
+                        <br />
+                        <label for="">User:</label> <input type="text" class="label" value="bitcoinAddressHash123" readonly>
+                </div>
+        </div>
+        <div id="eth-row" class="row hiden">
+                <div class="col-12 col-md-12 text-center">
+                        <img class="contained" src="../marbella/codes/ETH.jpeg">
+                        <br />
+                        <br />
+                        <label for="">Address:</label> <input type="text" class="label"  value="bitcoinAddressHash123" readonly>
+                </div>
+        </div>
+        <div id="venmo-row" class="row hiden">
+                <div class="col-12 col-md-12 text-center">
+                        <img class="contained" src="../marbella/codes/venmo.jpeg">
+                        <br />
+                        <br />
+                        <label for="">User:</label> <input type="text" class="label" value="bitcoinAddressHash123" readonly>
+                </div>
+        </div>
+        <div id="zelle-row" class="row hiden">
+                <div class="col-12 col-md-12 text-center ">
+                        <img class="contained" src="../marbella/codes/zelle.jpeg">
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
-
-
 </html>
