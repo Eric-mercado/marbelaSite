@@ -40,14 +40,8 @@ public class KaraokeController {
     private void validateKaraoke (Karaoke karaoke) {
         List<Karaoke> canciones = repository.findAll();
         isAnotherOneThere(karaoke, canciones);
-        isQueueBigEnough(karaoke,canciones);
     }
 
-    private void isQueueBigEnough(Karaoke karaoke, List<Karaoke> canciones) {
-        if(canciones.size() >= 30) {
-            throw  new KaraokeException("La lista de cancioes de momento es muy larga porfavor vuelva a intentar mas tarde");
-        }
-    }
 
     private void isAnotherOneThere(Karaoke karaoke, List<Karaoke> canciones) {
         boolean duplicate = canciones.stream().map(Karaoke::getCancion)
