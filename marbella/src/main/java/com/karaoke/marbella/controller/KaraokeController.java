@@ -32,6 +32,11 @@ public class KaraokeController {
         return  ResponseEntity.ok(repository.findAll());
     }
 
+    @GetMapping("/{karaoke}")
+    public ResponseEntity<List<Karaoke>> getAllByKaraoke(@PathVariable String karaoke) {
+        return  ResponseEntity.ok(repository.findAllByKaraoke(karaoke));
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
         repository.deleteById(id);
@@ -44,8 +49,10 @@ public class KaraokeController {
 
 
     private void isAnotherOneThere(Karaoke karaoke, List<Karaoke> canciones) {
-        boolean duplicate = canciones.stream().map(Karaoke::getCancion)
-                .anyMatch(cancion -> cancion.equalsIgnoreCase(karaoke.getCancion()));
+        boolean duplicate = canciones
+                .stream()
+                .anyMatch(existingKaraoke -> existingKaraoke.getCancion().equalsIgnoreCase(karaoke.getCancion()) &&
+                        existingKaraoke.getKaraoke().equalsIgnoreCase(karaoke.getKaraoke()));
         if(duplicate) {
             throw  new KaraokeException(karaoke.getCancion() + " ya fue pedida por alguien mas y se encuentra en la lista de canciones");
         }

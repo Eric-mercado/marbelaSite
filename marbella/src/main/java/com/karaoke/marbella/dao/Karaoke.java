@@ -20,7 +20,7 @@ public class Karaoke {
     private Integer id;
     private String artista;
     private String cancion;
-    private String karakoke;
+    private String karaoke;
     private String canta;
 
 }

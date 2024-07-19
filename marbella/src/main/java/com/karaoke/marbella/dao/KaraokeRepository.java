@@ -7,4 +7,5 @@ import java.util.List;
 public interface KaraokeRepository extends JpaRepository<Karaoke, Integer> {
 
     List<Karaoke> findAllByCancion(String cancion);
+    List<Karaoke> findAllByKaraoke(String karaoke);
 }
