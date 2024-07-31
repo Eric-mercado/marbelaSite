@@ -13,6 +13,9 @@
     <title>Lista de canciones y complacencias</title>
     <style>
 
+            .hiding-col{
+                display: none;
+            }
             .donation .hiden {
             display: none;
             }
@@ -219,7 +222,7 @@
         function deleteRow(input, row) {
             console.log("deleting row")
             console.log(input)
-            axios.delete('http://localhost:8080/' + input)
+            axios.delete('https://us-central1-karaoke-marbella.cloudfunctions.net/app/api/delete/' + input)
             .then(response => {
             console.log('Canción eliminada exitosamente:', response.data);
             row.remove();
@@ -232,7 +235,7 @@
 
         function insertSongRow(karaoke, tableBody) {
             const row = tableBody.append('<tr></tr>').children().last(); 
-                row.append('<td class="song-id">' + karaoke.id + '</td>');
+                row.append('<td class="song-id hiding-col>' + karaoke.id + '</td>');
                 row.append('<td>' + karaoke.canta + '</td>');
                 row.append('<td>' + karaoke.artista + '</td>');
                 row.append('<td>' + karaoke.cancion + '</td>');
@@ -250,7 +253,7 @@
      $(document).ready(function() {
         let karaokeProvider = "Marbella"
         $("#tuNombre").hide(); 
-        $("#formulario-complacencias").submit(function(event) {
+        $("#formulario-complacencias").submit(async function(event) {
             event.preventDefault(); 
              // Validar que los inputs no estén vacíos
              if (cancion === "") {
@@ -264,23 +267,22 @@
             var cancion = $("#cancion").val();
             var karaoke = karaokeProvider
             const cancion1 = new Cancion(artista, cancion, karaoke, nombreCantante);
-            console.log('cancion enviada:' +  JSON.stringify(cancion1))
-            axios.post('http://localhost:8080/', {
+            console.log('cancion enviada:' +  JSON.stringify(cancion1)) 
+            try {
+            const response = await axios.post('https://us-central1-karaoke-marbella.cloudfunctions.net/app/api/create', {
                 artista: cancion1.artista,
                 cancion: cancion1.cancion,
                 karaoke: cancion1.karaoke,
                 canta: cancion1.canta
-            })
-            .then(response => {
-                console.log('cancion recibida:' +  JSON.stringify(response.data))
-                insertSongRow(response.data, tableBody)
-            })
-            .catch(error => {
+            });
+            console.log('cancion recibida:' +  JSON.stringify(response.data));
+            insertSongRow(cancion1, tableBody);
+            } catch (error) {
                 console.error('Error al enviar la canción:', error);
                 const errorMessageDiv = $('.error-message');
-                 errorMessageDiv.append('<p class="error-message__content"><strong>Error:</strong> ' + error.response.data + '</p>');
-                 errorMessageDiv.show();
-            });
+                errorMessageDiv.append('<p class="error-message__content"><strong>Error:</strong> ' + error.response.data + '</p>');
+                errorMessageDiv.show();
+            }
         });
 
         // show donation Qr
@@ -307,7 +309,7 @@
          $("#getAllButton").click(function() {
             event.preventDefault(); 
             let karaokeProvider = "Marbella"
-             axios.get('http://localhost:8080/'+karaokeProvider, {
+             axios.get('https://us-central1-karaoke-marbella.cloudfunctions.net/app/api/read/all/'+karaokeProvider, {
             })
             .then(response => {
                 const tableBody = $('#tabla-canciones').find('tbody');
@@ -339,7 +341,7 @@
             <table id="tabla-canciones" class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>id</th>
+                        <th class="hiding-col">id</th>
                         <th>Canta</th>
                         <th>Artista</th>
                         <th>Canción</th>
@@ -348,7 +350,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
+                        <td class="hiding-col">1</td>
                         <td>Marbella</td>
                         <td>Vicente Fernandez</td>
                         <td>Matalas</td>
